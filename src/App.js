@@ -1,32 +1,52 @@
 // App.js
 import React, { useState } from 'react';
-import TodoList from './TodoList';
-import AddTodo from './AddTodo';
 
 const App = () => {
-  const [todos, setTodos] = useState([]);
+  // newTask is whatever the user typed up
+  const [newTask, setNewTask] = useState('');
+  // todoList is an array with tasks objects where each obj has properties:
+  // [{task1}, {task2}], where task1 = {id:"1", task:"finish work", completionStatus:"false"}
+  const [todoList, setTodoList] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
-  const addTodo = (task) => {
-    setTodos([...todos, { id: todos.length + 1, task, completed: false }]);
-  };
+  function handleAddTask(event){
+    setNewTask(event.target.value)
+  }
 
-  const toggleTodo = (id) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
+  function addTask(){
+    if(newTask!=''){
+      const currentTime = new Date(); 
+      setTodoList([...todoList, {id:currentTime, task: newTask, completionStatus: false}]);
+      setNewTask('');
+    }
+  }
+  function deleteTask(itemID){
+    const updatedTodoList = todoList.filter(item => item.id !== itemID);
+    setTodoList(updatedTodoList);
+  }
+  function handleCheckBox(){
 
-  const deleteTodo = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
+  }
 
   return (
     <div>
-      <h1>Todo List</h1>
-      <AddTodo addTodo={addTodo} />
-      <TodoList todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
+      <h1>My Todo List</h1>
+      <div>
+        <ul>
+          <li>
+            <input type='text' value={newTask} onChange={handleAddTask} />
+            <button onClick={addTask}>Add</button>
+            {todoList.map(item => (
+              <div>
+                <input type='checkbox' checked={isChecked} onChange={handleCheckBox}></input>
+                <li key={item.id} style={{display:'inline-block', marginRight: '5px'}}> {item.task}</li>
+                <button onClick={() => deleteTask(item.id)}> Delete </button>
+              </div>
+            ))}
+          </li>
+        </ul>
+      </div>
+
     </div>
   );
 };
