@@ -38,16 +38,17 @@ const App = () => {
             <input type='text' value={newTask} onChange={handleAddTask} />
             <button onClick={addTask}>Add</button>
             {todoList.map((item, index) => (
-              <div>
+              <div style={{display:'flex', marginTop: '10px'}}>
                 <input type='checkbox' checked={item.completionStatus} onChange={() => handleCheckBox(index)}></input>
-                <li key={item.id} style={{display:'inline-block', marginRight: '5px'}}> {item.task}</li>
+                  <span style={{textDecoration: item.completionStatus ? 'line-through' : 'none', marginRight: '5px'}}>
+                    {item.task}
+                  </span>
                 <button onClick={() => deleteTask(item.id)}> Delete </button>
               </div>
             ))}
           </li>
         </ul>
       </div>
-
     </div>
   );
 };
