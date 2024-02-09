@@ -7,7 +7,6 @@ const App = () => {
   // todoList is an array with tasks objects where each obj has properties:
   // [{task1}, {task2}], where task1 = {id:"1", task:"finish work", completionStatus:"false"}
   const [todoList, setTodoList] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
 
   function handleAddTask(event){
     setNewTask(event.target.value)
@@ -24,9 +23,11 @@ const App = () => {
     const updatedTodoList = todoList.filter(item => item.id !== itemID);
     setTodoList(updatedTodoList);
   }
-  function handleCheckBox(){
-
-  }
+  const handleCheckBox = (index) => {
+    const updatedTodoList = [...todoList];
+    updatedTodoList[index].completionStatus = !updatedTodoList[index].completionStatus;  
+    setTodoList(updatedTodoList);
+  };
 
   return (
     <div>
@@ -36,9 +37,9 @@ const App = () => {
           <li>
             <input type='text' value={newTask} onChange={handleAddTask} />
             <button onClick={addTask}>Add</button>
-            {todoList.map(item => (
+            {todoList.map((item, index) => (
               <div>
-                <input type='checkbox' checked={isChecked} onChange={handleCheckBox}></input>
+                <input type='checkbox' checked={item.completionStatus} onChange={() => handleCheckBox(index)}></input>
                 <li key={item.id} style={{display:'inline-block', marginRight: '5px'}}> {item.task}</li>
                 <button onClick={() => deleteTask(item.id)}> Delete </button>
               </div>
